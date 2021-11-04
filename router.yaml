@@ -1,0 +1,28 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: istio-ingressgateway-secure
+  namespace: bookretail-istio-system
+spec:
+  host: >-
+    istio-ingressgateway-secure-bookretail-istio-system.apps.cluster-fgf4l.fgf4l.sandbox1721.opentlc.com #cambiar por el nombre del cluster
+  to:
+    kind: Service
+    name: istio-ingressgateway
+    weight: 100
+  port:
+    targetPort: http2
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: None
+  wildcardPolicy: None
+status:
+  ingress:
+    - host: >-
+        istio-ingressgateway-secure-bookretail-istio-system.apps.cluster-fgf4l.fgf4l.sandbox1721.opentlc.com #cambiar por el nombre del cluster
+      routerName: default
+      conditions:
+        - type: Admitted
+          status: 'True'
+      wildcardPolicy: None
+      routerCanonicalHostname: apps.cluster-fgf4l.fgf4l.sandbox1721.opentlc.com #cambiar por el nombre del cluster
