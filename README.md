@@ -104,13 +104,17 @@ Review also the kiali console to see the mesh diagram.
 oc label namespace bookinfo istio-injection=enabled
 ```
 
+At this point you will be able to review the graph with the mesh topology if you generate some traffic. 
+Notice the source is labeled as "unknown"
+
 
 ## Create gateway and virtual service.
+
+
 Create these elements with the following command:
 ```bash
-oc project bookinfo
 
-cat << EOF | oc create -f -
+cat << EOF | oc create -n bookinfo -f -
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
@@ -173,7 +177,7 @@ Let's configure another virtual service, this time for a microservice that is go
 
 ```bash
 oc project bookinfo
-cat << EOF | oc create -f -
+cat << EOF | oc create -n bookinfo -f -
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
@@ -197,7 +201,7 @@ EOF
 In this case, we need to configure the set of destination rules, to identify the versions of each pod.
 
 ```bash
-cat << EOF | oc create -f -
+cat << EOF | oc create -n bookinfo -f -
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
@@ -267,7 +271,7 @@ EOF
 Generate some traffic to test the configuration.
 
 ```bash
-export GATEWAY_URL=$(oc -n istio-system get route istio-ingressgateway -o jsonpath='{.spec.host}')
+export GATEWAY_URL=$(oc -n bookretail-istio-system get route istio-ingressgateway -o jsonpath='{.spec.host}')
 
 echo "http://$GATEWAY_URL/productpage"
 
